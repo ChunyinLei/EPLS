@@ -1,5 +1,5 @@
 ## Multivariate Kendall’s tau PLS
-Multi_kenpls.fit0 <- function (X, Y, ncomp, center = TRUE, stripped = FALSE, ...) {
+Multi_kenpls.fit <- function (X, Y, ncomp, center = TRUE, stripped = FALSE, ...) {
   Y <- as.matrix(Y)
   if (!stripped) {
     dnX <- dimnames(X)
@@ -27,14 +27,9 @@ Multi_kenpls.fit0 <- function (X, Y, ncomp, center = TRUE, stripped = FALSE, ...
     Ymeans <- rep_len(0, nresp)
   }
   
-  XY <- cbind(X, y)
-  sigmaXY <- Multi_Kendall_tau(XY)
-  m <- npred+1
-  o <- npred+nresp
-  sigma_xx <- sigmaXY[1:npred,1:npred]
-  sigma_yy <- sigmaXY[m:o, m:o]
-  sigma_xy <- sigmaXY[1:npred, m:o]
-  S <- sigma_xy
+  Kendall_xy <- Multi_Kendall_tau(X, Y)
+  sigma_xy <- Robust_Sigma(X, Xmeans) %*% Kendall_xy %*% t(Robust_Sigma(Y, Ymeans))
+  S <- as.matrix(sigma_xy * (nobj-1))
   
   for (a in 1:ncomp) {
     if (nresp == 1) {
@@ -76,8 +71,10 @@ Multi_kenpls.fit0 <- function (X, Y, ncomp, center = TRUE, stripped = FALSE, ...
   if (stripped) {
     list(coefficients = B, Xmeans = Xmeans, Ymeans = Ymeans)
   }else {
-    residuals <- -fitted + c(Y)
-    fitted <- fitted + rep(Ymeans, each = nobj)
+    residuals <- - fitted + c(Y)
+    fitted <- fitted + rep(Ymeans, each = nobj) # Add mean
+    
+    ## Add dimnames and classes:
     objnames <- dnX[[1]]
     if (is.null(objnames)) 
       objnames <- dnY[[1]]
@@ -92,6 +89,7 @@ Multi_kenpls.fit0 <- function (X, Y, ncomp, center = TRUE, stripped = FALSE, ...
     dimnames(fitted) <- dimnames(residuals) <- list(objnames, respnames, nCompnames)
     class(TT) <- class(U) <- "scores"
     class(P) <- class(tQ) <- "loadings"
+    
     
     list(coefficients = B, scores = TT, loadings = P, Yscores = U, 
          Yloadings = t(tQ), projection = R, Xmeans = Xmeans, 
