@@ -1,5 +1,5 @@
-## Multivariate Kendall’s tau PLS
-Multi_kenpls.fit <- function (X, Y, ncomp, center = TRUE, stripped = FALSE, ...) {
+## The main function of EPLS 
+EPLS.fit <- function (X, Y, ncomp, center = TRUE, stripped = FALSE, ...) {
   Y <- as.matrix(Y)
   if (!stripped) {
     dnX <- dimnames(X)
