@@ -9,7 +9,11 @@ Multi_Kendall_tau <- function(X, Y){
   s <- 0
   for(j in 1:(n - 1)){
     for(i in (j + 1):n){
-      s <- s + (as.matrix(X[i, ] - X[j, ]) %*% t(Y[i, ] - Y[j, ])) / (norm((X[i, ] - X[j, ]), '2') * norm((Y[i, ] - Y[j, ]), '2'))
+      if(norm((X[i, ] - X[j, ]), '2') == 0 || norm((Y[i, ] - Y[j, ]), '2') == 0){
+        s <- s + matrix(0, nrow = ncol(X), ncol = ncol(Y))
+      }else{
+        s <- s + (as.matrix(X[i, ] - X[j, ]) %*% t(Y[i, ] - Y[j, ])) / (norm((X[i, ] - X[j, ]), '2') * norm((Y[i, ] - Y[j, ]), '2'))
+      }
     }
   }
   ret <- s / choose(n, 2)
