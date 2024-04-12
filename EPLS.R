@@ -1,4 +1,4 @@
-## The main function of elliptical partial least squares (EPLS) 
+## The main function of Elliptical Partial Least Squares (EPLS) 
 EPLS.fit <- function (X, Y, ncomp, center = TRUE, stripped = FALSE, ...) {
     Y <- as.matrix(Y)
     if (!stripped) {
