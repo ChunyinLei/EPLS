@@ -1,6 +1,3 @@
-# Robust Partial Least Squares Algorithm based on Multivariate Kendall’s Tau (EPLS)
-• A simple and efficient robust PLS method for low-dimensional, high-dimensional, and multiple-response data.
-
-• Adopted the multivariate Kendall's tau statistic to build the robust covariance matrix.
-
-• This algorithm could be robust against the heavy-tailed elliptical distribution datas and noises.
+# Robust partial least squares based on Kendall's tau matrix for elliptically distributed data
+EPLS: Elliptical Partial Least Squares
+ECPLS: Elliptical Covariance Partial Least Squares
